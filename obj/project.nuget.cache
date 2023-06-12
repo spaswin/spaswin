@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TIhmzAEgQkOOURNZmb3fJAy3nvPkQAWsLv3rc8wh2nOuoEfrlH4319SpZFze/J62LmiTjhYDvuAOsYzNlBTOYA==",
+  "dgSpecHash": "bVJkrXjlhOseR6eFkwj1rxxINejQIJC/Aze2k5LsG1RZErN2Vc+3ia8aYM+w9a5+OszDiW3ziUNnxiT16GL2qg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\chatapp.csproj",
+  "projectFilePath": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aswin.parameswaran\\.nuget\\packages\\azure.core\\1.21.0\\azure.core.1.21.0.nupkg.sha512",
     "C:\\Users\\aswin.parameswaran\\.nuget\\packages\\azure.messaging.webpubsub\\1.0.0\\azure.messaging.webpubsub.1.0.0.nupkg.sha512",

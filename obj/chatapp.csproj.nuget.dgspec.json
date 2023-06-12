@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\chatapp.csproj": {}
+    "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\chatapp.csproj": {
+    "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\chatapp.csproj",
+        "projectUniqueName": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp.csproj",
         "projectName": "chatapp",
-        "projectPath": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\chatapp.csproj",
+        "projectPath": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp.csproj",
         "packagesPath": "C:\\Users\\aswin.parameswaran\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\obj\\",
+        "outputPath": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\DevExpress 20.2\\Components\\Offline Packages",
