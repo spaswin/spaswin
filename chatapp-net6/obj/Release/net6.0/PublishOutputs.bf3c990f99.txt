@@ -1,0 +1,13 @@
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\chatapp.exe
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\chatapp.dll
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\chatapp.deps.json
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\chatapp.runtimeconfig.json
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\chatapp.pdb
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\Azure.Core.dll
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\Azure.Messaging.WebPubSub.dll
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\Microsoft.Azure.WebPubSub.AspNetCore.dll
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\Microsoft.Azure.WebPubSub.Common.dll
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\aswin.parameswaran\Dev\Azure\chatapp-net6\obj\Release\net6.0\PubTmp\Out\System.Memory.Data.dll

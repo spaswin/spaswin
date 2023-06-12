@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "PhHFfufTCGyOzGJt/xHX5oQBkNgGsBrCt2XjopTGvRw=",
+  "Source": "chatapp",
+  "BasePath": "_content/chatapp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "chatapp\\wwwroot",
+      "Source": "chatapp",
+      "ContentRoot": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\wwwroot\\",
+      "BasePath": "_content/chatapp",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\wwwroot\\index.html",
+      "SourceId": "chatapp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\chatapp-net6\\wwwroot\\",
+      "BasePath": "_content/chatapp",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}
