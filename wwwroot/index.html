@@ -25,8 +25,16 @@
                     m.innerText = content[0];
                     messages.appendChild(m);
                     if (content.length > 1) {
-                        p.innerText = content[1];
-                        users.appendChild(p);
+                        let keys = Object.keys(content[1]);
+                        let values = Object.values(content[1]);
+                        let htm = '<ul>';
+                        for (i = 0; i < keys.length; i++) {
+                            htm += '<li>';
+                            htm += '<a>' + keys[0] + '</a>' + '-' + values[0];
+                            htm += '</li>';
+                        }
+                        htm += '</ul>';
+                        p.innerText = htm;
                     }
                 };
 
@@ -43,6 +51,6 @@
         <h1>Online Users</h1>
         <div id="onlineUser"></div>
     </div>
-        </body>
+</body>
 
 </html>

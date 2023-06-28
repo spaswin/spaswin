@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "OBmgGr7zVVSE1shUEuy0eR/TnYy5w7deN2J9TNpNNT4=",
+  "Hash": "dV/8tN6Ubh4d7qmhunp0A/T2SzY7jjlFDjPpTjEZ58Y=",
   "Source": "chatapp",
   "BasePath": "_content/chatapp",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "chatapp\\wwwroot",
       "Source": "chatapp",
-      "ContentRoot": "C:\\Users\\aswin.parameswaran\\Dev\\Azure\\chatapp-net6\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\wwwroot\\",
       "BasePath": "_content/chatapp",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\aswin.parameswaran\\Dev\\Azure\\chatapp-net6\\wwwroot\\index.html",
+      "Identity": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\wwwroot\\index.html",
       "SourceId": "chatapp",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\aswin.parameswaran\\Dev\\Azure\\chatapp-net6\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\aswin.parameswaran\\Dev\\localGit\\wwwroot\\",
       "BasePath": "_content/chatapp",
       "RelativePath": "index.html",
       "AssetKind": "All",
