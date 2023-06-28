@@ -14,9 +14,9 @@
         ws.onopen = () => console.log('connected');
         ws.onerror = (e, s, t) => { debugger; };
         ws.onclose = (e, s, t) => { debugger; };
-        ws.onmessage = (e, s, t) => { debugger; };
         let messages = document.querySelector('#messages');
         ws.onmessage = event => {
+            debugger;
             let m = document.createElement('p');
             m.innerText = event.data;
             messages.appendChild(m);
