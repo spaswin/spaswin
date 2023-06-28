@@ -1,3 +1,4 @@
+using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
@@ -37,8 +38,18 @@ app.UseEndpoints(endpoints =>
     });
     endpoints.MapGet("/AddGroup", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
     {
-        var response = await serviceClient.AddUserToGroupAsync("MSCTI", "aswin");
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+
+        try
+        {
+            var response = await serviceClient.AddUserToGroupAsync("MSCTI", "aswin");
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+        catch (Exception ex)
+        {
+            await context.Response.WriteAsync(JsonSerializer.Serialize(ex));
+            throw;
+        }
+
     });
 
 
