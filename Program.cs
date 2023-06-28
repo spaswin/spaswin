@@ -1,5 +1,6 @@
 using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
+using Microsoft.VisualBasic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseEndpoints(endpoints =>
-{    
+{
     endpoints.MapGet("/negotiate", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
     {
         var id = context.Request.Query["id"];
@@ -47,7 +48,8 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async Task OnConnectedAsync(ConnectedEventRequest request)
     {
-        await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined.");
+        string connection = string.Join(',', request.ConnectionContext.ConnectionStates.Select(p => p.Key));
+        await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined. connections {connection}");
     }
 
     public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
@@ -55,5 +57,20 @@ sealed class Sample_ChatApp : WebPubSubHub
         await _serviceClient.SendToAllAsync($"[{request.ConnectionContext.UserId}] {request.Data}");
 
         return request.CreateResponse($"");
+    }
+
+    public override async Task OnDisconnectedAsync(DisconnectedEventRequest request)
+    {
+        string user = $"Connection Id : {request.ConnectionContext.ConnectionId}, UserId: {request.ConnectionContext.UserId}";
+        await _serviceClient.SendToAllAsync(user);
+        await base.OnDisconnectedAsync(request);
+    }
+
+    public override async ValueTask<ConnectEventResponse> OnConnectAsync(ConnectEventRequest request, CancellationToken cancellationToken)
+    {
+        string user = $"Connection Id : {request.ConnectionContext.ConnectionId}, UserId: {request.ConnectionContext.UserId}";
+        await _serviceClient.SendToAllAsync(user);
+        return await base.OnConnectAsync(request, cancellationToken);
+
     }
 }
