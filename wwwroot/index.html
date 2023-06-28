@@ -1,41 +1,47 @@
 <html>
 
 <body>
-    <h1>Azure Web PubSub Chat</h1>
-    <input id="message" placeholder="Type to chat...">
-    <div id="messages"></div>
-    <div id="onlineUser"></div>
-    <script>
-        (async function () {
-            let id = prompt('Please input your user name');
-            let res = await fetch(`/negotiate?id=${id}`);
-            let url = await res.text();
-            debugger;
-            let ws = new WebSocket(url);
-            ws.onopen = () => console.log('connected');
-            ws.onerror = (e, s, t) => { debugger; };
-            ws.onclose = (e, s, t) => { debugger; };
-            let messages = document.querySelector('#messages');
-            let users = document.querySelector('#onlineUser');
-            ws.onmessage = event => {
+    <div style="width:40% ; float:left">
+        <h1>Azure Web PubSub Chat</h1>
+        <input id="message" placeholder="Type to chat...">
+        <div id="messages"></div>
+        <script>
+            (async function () {
+                let id = prompt('Please input your user name');
+                let res = await fetch(`/negotiate?id=${id}`);
+                let url = await res.text();
                 debugger;
-                var content = event.data.split('||');
-                let m = document.createElement('p');
-                let p = document.createElement('p');
-                m.innerText = content[0];
-                p.innerText = content[1];
-                messages.appendChild(m);
-                users.appendChild(p);
-            };
+                let ws = new WebSocket(url);
+                ws.onopen = () => console.log('connected');
+                ws.onerror = (e, s, t) => { debugger; };
+                ws.onclose = (e, s, t) => { debugger; };
+                let messages = document.querySelector('#messages');
+                let users = document.querySelector('#onlineUser');
+                ws.onmessage = event => {
+                    debugger;
+                    var content = event.data.split('||');
+                    let m = document.createElement('p');
+                    let p = document.createElement('p');
+                    m.innerText = content[0];
+                    messages.appendChild(m);
+                    if (content.lenth > 1) {
+                        p.innerText = content[1];
+                        users.appendChild(p);
+                    }
+                };
 
-            let message = document.querySelector('#message');
-            message.addEventListener('keypress', e => {
-                if (e.charCode !== 13) return;
-                ws.send(message.value);
-                message.value = '';
-            });
-        })();
-    </script>
-</body>
+                let message = document.querySelector('#message');
+                message.addEventListener('keypress', e => {
+                    if (e.charCode !== 13) return;
+                    ws.send(message.value);
+                    message.value = '';
+                });
+            })();
+        </script>
+    </div>
+    <div style="width:40%; float:right">
+        <div id="onlineUser"></div>
+    </div>
+        </body>
 
 </html>
