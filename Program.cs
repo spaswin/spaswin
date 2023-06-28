@@ -33,18 +33,7 @@ app.UseEndpoints(endpoints =>
         await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: id).AbsoluteUri);
     });
 
-    endpoints.MapGet("/negotiate", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
-    {
-        var id = context.Request.Query["id"];
-        if (id.Count != 1)
-        {
-            context.Response.StatusCode = 400;
-            await context.Response.WriteAsync("missing user id");
-            return;
-        }
-        await context.Response.WriteAsync(serviceClient.(userId: id).AbsoluteUri);
-    });
-
+    
     endpoints.MapWebPubSubHub<Sample_ChatApp>("/eventhandler/{*path}");
 });
 
