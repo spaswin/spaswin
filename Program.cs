@@ -2,6 +2,8 @@ using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
 using Microsoft.Extensions.Azure;
 using Microsoft.VisualBasic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,12 +55,13 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async Task OnConnectedAsync(ConnectedEventRequest request)
     {
-        await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined.");
+        string data =  JsonSerializer.Serialize(userConnections);
+        await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined.|| {data} ");
     }
 
     public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
     {
-        string data = string.Join(",", userConnections);
+        string data = JsonSerializer.Serialize(userConnections);
         await _serviceClient.SendToAllAsync($"[{request.ConnectionContext.UserId}] {request.Data} || {data} ");
 
         return request.CreateResponse($"");
