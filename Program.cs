@@ -41,6 +41,9 @@ sealed class Sample_ChatApp : WebPubSubHub
 {
     private readonly WebPubSubServiceClient<Sample_ChatApp> _serviceClient;
 
+    IDictionary<string,string> userConnections = new Dictionary<string,string>();
+
+
     public Sample_ChatApp(WebPubSubServiceClient<Sample_ChatApp> serviceClient)
     {
         _serviceClient = serviceClient;
@@ -48,7 +51,6 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async Task OnConnectedAsync(ConnectedEventRequest request)
     {
-        string connection = string.Join(',', request.ConnectionContext.ConnectionStates.Select(p => p.Key));
         await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined. connections {connection}");
     }
 
@@ -61,16 +63,20 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async Task OnDisconnectedAsync(DisconnectedEventRequest request)
     {
-        string user = $"Connection Id : {request.ConnectionContext.ConnectionId}, UserId: {request.ConnectionContext.UserId}";
-        await _serviceClient.SendToAllAsync(user);
+        userConnections.Remove(request.ConnectionContext.UserId);
         await base.OnDisconnectedAsync(request);
     }
 
     public override async ValueTask<ConnectEventResponse> OnConnectAsync(ConnectEventRequest request, CancellationToken cancellationToken)
     {
-        string user = $"Connection Id : {request.ConnectionContext.ConnectionId}, UserId: {request.ConnectionContext.UserId}";
-        await _serviceClient.SendToAllAsync(user);
+
+        userConnections.TryAdd(request.ConnectionContext.UserId, request.ConnectionContext.ConnectionId);
         return await base.OnConnectAsync(request, cancellationToken);
 
+    }
+
+    public string GetAllUsers()
+    {
+        return string.Join(',', userConnections.Keys);
     }
 }
