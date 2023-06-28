@@ -1,5 +1,6 @@
 using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
+using Microsoft.Extensions.Azure;
 using Microsoft.VisualBasic;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,18 @@ app.UseEndpoints(endpoints =>
         await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: id).AbsoluteUri);
     });
 
+    endpoints.MapGet("/negotiate", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
+    {
+        var id = context.Request.Query["id"];
+        if (id.Count != 1)
+        {
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsync("missing user id");
+            return;
+        }
+        await context.Response.WriteAsync(serviceClient.(userId: id).AbsoluteUri);
+    });
+
     endpoints.MapWebPubSubHub<Sample_ChatApp>("/eventhandler/{*path}");
 });
 
@@ -56,7 +69,8 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
     {
-        await _serviceClient.SendToAllAsync($"[{request.ConnectionContext.UserId}] {request.Data}");
+        string data = string.Join(",", userConnections);
+        await _serviceClient.SendToAllAsync($"[{request.ConnectionContext.UserId}] {request.Data} || {data} ");
 
         return request.CreateResponse($"");
     }
