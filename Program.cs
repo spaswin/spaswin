@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
 using Microsoft.Extensions.Azure;
@@ -34,9 +35,10 @@ app.UseEndpoints(endpoints =>
         }
         await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: id).AbsoluteUri);
     });
-    endpoints.MapGet("/HealthCheck", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
+    endpoints.MapGet("/AddGroup", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
     {
-        await context.Response.WriteAsync("Ok");
+        var response = await serviceClient.AddUserToGroupAsync("MSCTI", "aswin");
+        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     });
 
 
@@ -49,7 +51,7 @@ sealed class Sample_ChatApp : WebPubSubHub
 {
     private readonly WebPubSubServiceClient<Sample_ChatApp> _serviceClient;
 
-    IDictionary<string,string> userConnections = new Dictionary<string,string>();
+    IDictionary<string, string> userConnections = new Dictionary<string, string>();
 
 
     public Sample_ChatApp(WebPubSubServiceClient<Sample_ChatApp> serviceClient)
@@ -59,7 +61,7 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async Task OnConnectedAsync(ConnectedEventRequest request)
     {
-        string data =  JsonSerializer.Serialize(userConnections);
+        string data = JsonSerializer.Serialize(userConnections);
         await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined.|| {data} ");
     }
 
