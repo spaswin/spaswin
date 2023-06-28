@@ -36,7 +36,7 @@ app.UseEndpoints(endpoints =>
         }
         await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: id).AbsoluteUri);
     });
-    endpoints.MapGet("/AddGroup", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
+    endpoints.MapGet("/testdata", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
     {
 
         try
