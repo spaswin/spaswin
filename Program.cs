@@ -34,8 +34,12 @@ app.UseEndpoints(endpoints =>
         }
         await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: id).AbsoluteUri);
     });
+    endpoints.MapGet("/HealthCheck", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
+    {
+        await context.Response.WriteAsync("Ok");
+    });
 
-    
+
     endpoints.MapWebPubSubHub<Sample_ChatApp>("/eventhandler/{*path}");
 });
 
