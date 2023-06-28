@@ -42,12 +42,11 @@ app.UseEndpoints(endpoints =>
         try
         {
             var response = await serviceClient.AddUserToGroupAsync("MSCTI", "aswin");
-            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+            await context.Response.WriteAsync("Ok");
         }
         catch (Exception ex)
         {
             await context.Response.WriteAsync(JsonSerializer.Serialize(ex));
-            throw;
         }
 
     });
