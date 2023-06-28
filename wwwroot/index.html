@@ -25,8 +25,9 @@
                     m.innerText = content[0];
                     messages.appendChild(m);
                     if (content.length > 1) {
-                        let keys = Object.keys(content[1]);
-                        let values = Object.values(content[1]);
+                        let record = JSON.parse(content[1]);
+                        let keys = Object.keys(record);
+                        let values = Object.values(record);
                         let htm = '<ul>';
                         for (i = 0; i < keys.length; i++) {
                             htm += '<li>';
@@ -34,7 +35,7 @@
                             htm += '</li>';
                         }
                         htm += '</ul>';
-                        p.innerText = htm;
+                        users.innerHTML = htm;
                     }
                 };
 
