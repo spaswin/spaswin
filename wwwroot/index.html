@@ -1,17 +1,58 @@
 <html>
-
+<head>
+    <link href="https://kendo.cdn.telerik.com/themes/6.4.0/default/default-main.css" rel="stylesheet" />
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/kendo.all.min.js"></script>
+</head>
 <body>
     <div style="width:40% ; float:left">
         <h1>Azure Web PubSub Chat</h1>
         <input id="message" placeholder="Type to chat...">
         <div id="messages"></div>
         <script>
+            var userId = '';
+            var mywebsocket = '';
+            function initWindow(owner, user, conn) {
+                debugger;
+                let chatgroupname = prompt('Please input your chat group name');
+                var windowOptions = {
+                    actions: ["Custom", "Minimize", "Maximize", "Close"],
+                    draggable: true,
+                    resizable: true,
+                    width: "500px",
+                    height: "500px",
+                    title: chatgroupname,
+                    visible: false,
+                };
+                $("#popupWindow").kendoWindow(windowOptions);
+                var data = fetch(`/creategroup?groupName=${chatgroupname}&firstUser=${owner}&secondUser=${user}`).then((response) => {
+                    debugger;
+                    if (response.ok) {
+                        // return response.json();
+                        return 'ok';
+                    }
+                    throw new Error('Something went wrong');
+                })
+                    .then((responseJson) => {
+                        debugger;
+                        // Do something with the response
+                    })
+                    .catch((error) => {
+                        debugger;
+                        console.log(error)
+                    });
+
+                $("#popupWindow").data("kendoWindow").open();
+            }
             (async function () {
+                mywebsocket = '';
                 let id = prompt('Please input your user name');
+                userId = id;
                 let res = await fetch(`/negotiate?id=${id}`);
                 let url = await res.text();
                 debugger;
                 let ws = new WebSocket(url);
+                mywebsocket = ws;
                 ws.onopen = () => console.log('connected');
                 ws.onerror = (e, s, t) => { debugger; };
                 ws.onclose = (e, s, t) => { debugger; };
@@ -19,7 +60,7 @@
                 let users = document.querySelector('#onlineUser');
                 ws.onmessage = event => {
                     debugger;
-                    var content = event.data.split('||');
+                    let content = JSON.parse(event.data);
                     let m = document.createElement('p');
                     let p = document.createElement('p');
                     m.innerText = content[0];
@@ -30,9 +71,12 @@
                         let values = Object.values(record);
                         let htm = '<ul>';
                         for (i = 0; i < keys.length; i++) {
-                            htm += '<li>';
-                            htm += 'user id : <a>' + keys[i] + '</a>' + ': connection id :' + values[i];
-                            htm += '</li>';
+                            if (keys[i] != userId) {
+                                htm += '<li>';
+                                htm += 'user id : <a>' + keys[i] + '</a>' + ': connection id :' + values[i];
+                                htm += `<button onclick=initWindow('${userId}','${keys[i]}','${values[i]}')>Chat</button>`;
+                                htm += '</li>';
+                            }
                         }
                         htm += '</ul>';
                         users.innerHTML = htm;
@@ -45,13 +89,29 @@
                     ws.send(message.value);
                     message.value = '';
                 });
+
             })();
         </script>
+        <style>
+            .k-window {
+                z-index: 100000;
+            }
+
+            @media screen and (max-width: 1023px) {
+                div.k-window {
+                    display: none !important;
+                }
+            }
+        </style>
+
     </div>
     <div style="width:40%; float:right">
         <h1>Online Users</h1>
         <div id="onlineUser"></div>
     </div>
+    <div id="popupWindow" style="display:none">
+        <!--<input id="message" placeholder="Type to chat...">
+        <div id="messages"></div>-->
+    </div>
 </body>
-
 </html>

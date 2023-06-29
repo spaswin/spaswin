@@ -1,4 +1,5 @@
 using Azure;
+using Azure.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebPubSub.AspNetCore;
 using Microsoft.Azure.WebPubSub.Common;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.VisualBasic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using static Sample_ChatApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,12 +38,23 @@ app.UseEndpoints(endpoints =>
         }
         await context.Response.WriteAsync(serviceClient.GetClientAccessUri(userId: id).AbsoluteUri);
     });
-    endpoints.MapGet("/testdata", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
+    endpoints.MapGet("/creategroup", async (WebPubSubServiceClient<Sample_ChatApp> serviceClient, HttpContext context) =>
     {
 
         try
         {
-            var response = await serviceClient.AddUserToGroupAsync("MSCTI", "aswin");
+            var groupName = context.Request.Query["groupName"];
+            var firstUser = context.Request.Query["firstUser"];
+            var secondUser = context.Request.Query["secondUser"];
+            //if (await serviceClient.GroupExistsAsync(groupName))
+            //{
+            var response = await serviceClient.AddUserToGroupAsync(groupName, firstUser);
+            var response1 = await serviceClient.AddUserToGroupAsync(groupName, secondUser);
+            MessageFormat format = new MessageFormat();
+            format.MessageType = "G";
+            format.Message = new BinaryData("hi welcome you all to the group");
+            var response3 = await serviceClient.SendToGroupAsync(groupName, JsonSerializer.Serialize(format));
+            //  }
             await context.Response.WriteAsync("Ok");
         }
         catch (Exception ex)
@@ -71,14 +84,19 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async Task OnConnectedAsync(ConnectedEventRequest request)
     {
-        string data = JsonSerializer.Serialize(userConnections);
-        await _serviceClient.SendToAllAsync($"{request.ConnectionContext.UserId} joined.|| {data} ");
+        MessageFormat format = new MessageFormat();
+        format.MessageType = "C";
+        format.Message = new BinaryData($"{request.ConnectionContext.UserId} joined.");
+        format.UserConnections = userConnections;
+        await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
     }
 
     public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
     {
-        string data = JsonSerializer.Serialize(userConnections);
-        await _serviceClient.SendToAllAsync($"[{request.ConnectionContext.UserId}] {request.Data} || {data} ");
+        MessageFormat format = new MessageFormat();
+        format.UserConnections = userConnections;
+        format.Message = request.Data;
+        await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
 
         return request.CreateResponse($"");
     }
@@ -101,4 +119,18 @@ sealed class Sample_ChatApp : WebPubSubHub
     {
         return string.Join(',', userConnections.Keys);
     }
+
+    public class MessageFormat
+    {
+        public string From { get; set; }
+        public string To { get; set; }
+
+        public IDictionary<string, string> UserConnections { get; set; }
+
+        public string MessageType { get; set; }
+
+        public BinaryData Message { get; set; }
+    }
+
+
 }
