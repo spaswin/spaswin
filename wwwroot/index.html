@@ -112,7 +112,7 @@
                 let groupmessage = document.querySelector('#groupmessage');
                 groupmessage.addEventListener('keypress', e => {
                     if (e.charCode !== 13) return;
-                    var data = new chatRoom();
+                    var data = chatRoom;
                     data.From = userId;
                     data.MessageType = 'G';
                     data.Message = '[' + userId + ']' + groupmessage.value;
