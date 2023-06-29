@@ -52,7 +52,7 @@ app.UseEndpoints(endpoints =>
             var response1 = await serviceClient.AddUserToGroupAsync(groupName, secondUser);
             MessageFormat format = new MessageFormat();
             format.MessageType = "G";
-            format.Message = new BinaryData("hi welcome you all to the group");
+            format.Message = "hi welcome you all to the group";
             var response3 = await serviceClient.SendToGroupAsync(groupName, JsonSerializer.Serialize(format));
             //  }
             await context.Response.WriteAsync("Ok");
@@ -86,7 +86,7 @@ sealed class Sample_ChatApp : WebPubSubHub
     {
         MessageFormat format = new MessageFormat();
         format.MessageType = "C";
-        format.Message = new BinaryData($"{request.ConnectionContext.UserId} joined.");
+        format.Message = $"{request.ConnectionContext.UserId} joined.";
         format.UserConnections = userConnections;
         await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
     }
@@ -95,7 +95,7 @@ sealed class Sample_ChatApp : WebPubSubHub
     {
         MessageFormat format = new MessageFormat();
         format.UserConnections = userConnections;
-        format.Message = request.Data;
+        format.Message = Convert.ToBase64String(request.Data);
         await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
 
         return request.CreateResponse($"");
@@ -129,7 +129,7 @@ sealed class Sample_ChatApp : WebPubSubHub
 
         public string MessageType { get; set; }
 
-        public BinaryData Message { get; set; }
+        public string Message { get; set; }
     }
 
 
