@@ -12,21 +12,15 @@
         <script>
             var userId = '';
             var mywebsocket = '';
-            function initWindow(owner, user, conn) {
-                debugger;
-                let chatgroupname = prompt('Please input your chat group name');
-                var windowOptions = {
-                    actions: ["Custom", "Minimize", "Maximize", "Close"],
-                    draggable: true,
-                    resizable: true,
-                    width: "500px",
-                    height: "500px",
-                    title: chatgroupname,
-                    visible: false,
-                };
-                $("#popupWindow").kendoWindow(windowOptions);
+            var chatRoom = {
+                From: '',
+                To: '',
+                MessageType: '',
+                Message: ''
+            };
+            function createGroup(owner, user, conn) {
+                chatgroupname = "Group Chat";
                 var data = fetch(`/creategroup?groupName=${chatgroupname}&firstUser=${owner}&secondUser=${user}`).then((response) => {
-                    debugger;
                     if (response.ok) {
                         // return response.json();
                         return 'ok';
@@ -41,7 +35,22 @@
                         debugger;
                         console.log(error)
                     });
-
+                openWindow()();
+            }
+            function initWindow(owner, user, conn) {
+                // let chatgroupname = prompt('Please input your chat group name');
+                var windowOptions = {
+                    actions: ["Custom", "Minimize", "Maximize", "Close"],
+                    draggable: true,
+                    resizable: true,
+                    width: "500px",
+                    height: "500px",
+                    title: "Group Chat",
+                    visible: false,
+                };
+                $("#popupWindow").kendoWindow(windowOptions);
+            }
+            function openWindow() {
                 $("#popupWindow").data("kendoWindow").open();
             }
             (async function () {
@@ -61,27 +70,38 @@
                 ws.onmessage = event => {
                     debugger;
                     let content = JSON.parse(event.data);
-                    let m = document.createElement('p');
-                    let p = document.createElement('p');
-                    m.innerText = content[0];
-                    messages.appendChild(m);
-                    if (content.length > 1) {
-                        let record = JSON.parse(content[1]);
-                        let keys = Object.keys(record);
-                        let values = Object.values(record);
-                        let htm = '<ul>';
-                        for (i = 0; i < keys.length; i++) {
-                            if (keys[i] != userId) {
-                                htm += '<li>';
-                                htm += 'user id : <a>' + keys[i] + '</a>' + ': connection id :' + values[i];
-                                htm += `<button onclick=initWindow('${userId}','${keys[i]}','${values[i]}')>Chat</button>`;
-                                htm += '</li>';
+
+                    if (content.MessageType != "G") {
+                        let m = document.createElement('p');
+                        m.innerText = content.Message;
+                        messages.appendChild(m);
+                        if (content.UserConnections) {
+                            let keys = Object.keys(content.UserConnections);
+                            let values = Object.values(content.UserConnections);
+                            let htm = '<ul>';
+                            for (i = 0; i < keys.length; i++) {
+                                if (keys[i] != userId) {
+                                    htm += '<li>';
+                                    htm += 'user id : <a>' + keys[i] + '</a>' + ': connection id :' + values[i];
+                                    htm += `<button onclick=createGroup('${userId}','${keys[i]}','${values[i]}')>Chat</button>`;
+                                    htm += '</li>';
+                                }
                             }
+                            htm += '</ul>';
+                            users.innerHTML = htm;
                         }
-                        htm += '</ul>';
-                        users.innerHTML = htm;
                     }
-                };
+                    else {
+                        let groupmessages = document.querySelector('#groupmessages');
+                        if (content.To == userId) {
+                            $("#popupWindow").data("kendoWindow").open();
+                        }
+                        let m = document.createElement('p');
+                        m.innerText = content.Message;
+                        groupmessages.appendChild(m);
+
+                    }
+                }
 
                 let message = document.querySelector('#message');
                 message.addEventListener('keypress', e => {
@@ -89,7 +109,17 @@
                     ws.send(message.value);
                     message.value = '';
                 });
-
+                let groupmessage = document.querySelector('#groupmessage');
+                groupmessage.addEventListener('keypress', e => {
+                    if (e.charCode !== 13) return;
+                    var data = new chatRoom();
+                    data.From = userId;
+                    data.MessageType = 'G';
+                    data.Message = '[' + userId + ']' + groupmessage.value;
+                    ws.send(JSON.stringify(data));
+                    groupmessage.value = '';
+                });
+                initWindow();
             })();
         </script>
         <style>
@@ -110,8 +140,8 @@
         <div id="onlineUser"></div>
     </div>
     <div id="popupWindow" style="display:none">
-        <!--<input id="message" placeholder="Type to chat...">
-        <div id="messages"></div>-->
+        <input id="groupmessage" placeholder="Type to chat...">
+        <div id="groupmessages"></div>
     </div>
 </body>
 </html>

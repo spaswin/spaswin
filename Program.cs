@@ -52,6 +52,9 @@ app.UseEndpoints(endpoints =>
             var response1 = await serviceClient.AddUserToGroupAsync(groupName, secondUser);
             MessageFormat format = new MessageFormat();
             format.MessageType = "G";
+            format.From = firstUser;
+            format.To = secondUser;
+            format.GroupName = groupName;
             format.Message = "hi welcome you all to the group";
             var response3 = await serviceClient.SendToGroupAsync(groupName, JsonSerializer.Serialize(format));
             //  }
@@ -93,10 +96,26 @@ sealed class Sample_ChatApp : WebPubSubHub
 
     public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
     {
-        MessageFormat format = new MessageFormat();
-        format.UserConnections = userConnections;
-        format.Message = Convert.ToBase64String(request.Data);
-        await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
+
+        var data = JsonSerializer.Deserialize<MessageFormat>(request.Data);
+        if (data != null)
+        {
+            if (data.MessageType == "G")
+            {
+                MessageFormat format = new MessageFormat();
+               // format.UserConnections = userConnections;
+                format.Message = Convert.ToBase64String(request.Data);
+                await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
+            }
+        }
+        else
+        {
+            MessageFormat format = new MessageFormat();
+            format.UserConnections = userConnections;
+            format.Message = Convert.ToBase64String(request.Data);
+            await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
+
+        }
 
         return request.CreateResponse($"");
     }
@@ -130,6 +149,8 @@ sealed class Sample_ChatApp : WebPubSubHub
         public string MessageType { get; set; }
 
         public string Message { get; set; }
+
+        public string GroupName { get; set; }
     }
 
 
