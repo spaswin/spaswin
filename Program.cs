@@ -102,7 +102,7 @@ sealed class Sample_ChatApp : WebPubSubHub
         {
             if (data.MessageType == "G")
             {
-                await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(request.Data));
+                await _serviceClient.SendToAllAsync($"{request.Data}");
             }
         }
         else
