@@ -104,7 +104,7 @@ sealed class Sample_ChatApp : WebPubSubHub
             {
                 MessageFormat format = new MessageFormat();
                 // format.UserConnections = userConnections;
-                format.Message = Convert.ToBase64String(request.Data);
+                format.Message = request.Data.ToString();
                 await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
             }
         }
