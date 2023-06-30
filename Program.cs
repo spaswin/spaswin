@@ -97,25 +97,25 @@ sealed class Sample_ChatApp : WebPubSubHub
     public override async ValueTask<UserEventResponse> OnMessageReceivedAsync(UserEventRequest request, CancellationToken cancellationToken)
     {
 
-        //var data = JsonSerializer.Deserialize<MessageFormat>(request.Data);
-        //if (data != null)
-        //{
-        //    if (data.MessageType == "G")
-        //    {
-        //        MessageFormat format = new MessageFormat();
-        //       // format.UserConnections = userConnections;
-        //        format.Message = Convert.ToBase64String(request.Data);
-        //        await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
-        //    }
-        //}
-        //else
-        //{
+        var data = JsonSerializer.Deserialize<MessageFormat>(request.Data);
+        if (data != null)
+        {
+            if (data.MessageType == "G")
+            {
+                MessageFormat format = new MessageFormat();
+                // format.UserConnections = userConnections;
+                format.Message = Convert.ToBase64String(request.Data);
+                await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
+            }
+        }
+        else
+        {
             MessageFormat format = new MessageFormat();
             format.UserConnections = userConnections;
-            format.Message = Convert.ToBase64String(request.Data);
+            format.Message = request.Data.ToString();
             await _serviceClient.SendToAllAsync(JsonSerializer.Serialize(format));
 
-       // }
+        }
 
         return request.CreateResponse($"");
     }

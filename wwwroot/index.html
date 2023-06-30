@@ -103,22 +103,22 @@
                     }
                 }
 
-                let message = document.querySelector('#message');
+                let message = document.querySelector('#groupmessage');
                 message.addEventListener('keypress', e => {
                     if (e.charCode !== 13) return;
                     ws.send(message.value);
                     message.value = '';
                 });
-                let groupmessage = document.querySelector('#groupmessage');
-                groupmessage.addEventListener('keypress', e => {
-                    if (e.charCode !== 13) return;
-                    var data = chatRoom;
-                    data.From = userId;
-                    data.MessageType = 'G';
-                    data.Message = '[' + userId + ']' + groupmessage.value;
-                    ws.send(JSON.stringify(data));
-                    groupmessage.value = '';
-                });
+                //let groupmessage = document.querySelector('#groupmessage');
+                //groupmessage.addEventListener('keypress', e => {
+                //    if (e.charCode !== 13) return;
+                //    var data = chatRoom;
+                //    data.From = userId;
+                //    data.MessageType = 'G';
+                //    data.Message = '[' + userId + ']' + groupmessage.value;
+                //    ws.send(groupmessage.value);
+                //    groupmessage.value = '';
+                //});
                 initWindow();
             })();
         </script>
