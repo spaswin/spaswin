@@ -55,7 +55,7 @@ app.UseEndpoints(endpoints =>
             format.From = firstUser;
             format.To = secondUser;
             format.GroupName = groupName;
-            format.Message = "hi welcome you all to the group";
+            format.Message = $"welcome {secondUser} to the group";
             var response3 = await serviceClient.SendToGroupAsync(groupName, JsonSerializer.Serialize(format));
             //  }
             await context.Response.WriteAsync("Ok");
