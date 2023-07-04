@@ -29,11 +29,9 @@
                     throw new Error('Something went wrong');
                 })
                     .then((responseJson) => {
-                        debugger;
                         // Do something with the response
                     })
                     .catch((error) => {
-                        debugger;
                         console.log(error)
                     });
                 openWindow();
@@ -113,14 +111,12 @@
                 ws.onmessage = event => {
                     /*debugger;*/
                     let content = JSON.parse(event.data);
-
                     if (content.MessageType != "G") {
                         let m = document.createElement('p');
                         m.innerText = content.Message;
                         messages.appendChild(m);
                         if (content.UserConnections) {
                             userConnections = content.UserConnections;
-
                             users.innerHTML = userconnbuilder(content.UserConnections, true);
                         }
                     }
@@ -132,7 +128,6 @@
                         let m = document.createElement('p');
                         m.innerText = content.Message;
                         groupmessages.appendChild(m);
-                        debugger;
                         let gpusr = document.querySelector('#groupUsers');
                         gpusr.innerHTML = groupconnbuilder();
                     }
@@ -186,12 +181,12 @@
     </div>
     <div id="popupWindow" style="display:none">
 
-        <div id="groupmessages" <div style="width: 40%; background: black; color: white; outline: thick solid #00ff00 ;float:left">
-    <input id="groupmessage" placeholder="Type to chat...">
-</div>
-                                <div id="groupUsers" style=" width: 40%; background: black; color: white; outline: thick solid #00ff00; float:right">
-                                    Invite Users
-                                </div>
+        <div id="groupmessages" style="width: 40%; background: black; color: white; outline: thick solid #00ff00 ;float:left">
+            <input id="groupmessage" placeholder="Type to chat...">
+        </div>
+        <div id="groupUsers" style=" width: 40%; background: black; color: white; outline: thick solid #00ff00; float:right">
+            Invite Users
+        </div>
     </div>
 </body>
 </html>
